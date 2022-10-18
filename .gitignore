@@ -28,4 +28,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-
+# mcenv
+version
+configs/*.cnf

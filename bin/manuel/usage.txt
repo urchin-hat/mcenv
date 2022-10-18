@@ -1,5 +1,6 @@
 mcenv 0.0.1
 Usage: mcenv <command> [<options>]
+Dsescription: env MySQL conf command
 
 Commands:
    add         ADD MySQL conf hard copy(cp command)

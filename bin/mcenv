@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# @set
+# -------------------------
+shopt -s nocasematch
+
+# @variable
+# -------------------------
+CMD_DIR=$(cd $(dirname $0); pwd)
+CMD_ROOT=$(dirname $(dirname $(readlink -f $CMD_DIR/mcenv)))
+
+# @func
+# -------------------------
+
+func_init () {
+    [ ! -e $CMD_ROOT/version ] && touch $CMD_ROOT/version
+}
+
+func_add() {
+    :
+}
+
+func_link() {
+    :
+}
+
+func_use() {
+    :
+}
+
+func_list() {
+    :
+}
+
+func_manuel() {
+    cat $CMD_ROOT/bin/manuel/usage.txt
+}
+
+# @main
+# -------------------------
+func_init
+
+if [ $# -ne 0 ]; then
+    declare op=$1
+    case "$op" in
+    "add")
+        echo "add"
+        ;;
+    "link")
+        echo "link"
+        ;;
+    "use")
+        echo $HOME
+        ;;
+    "list")
+        echo "list"
+        ;;
+    *)
+        echo "No such command '${1}'"
+        func_manuel
+        exit 1
+        ;;
+    esac
+else
+    func_manuel
+fi
+
+exit 0

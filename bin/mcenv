@@ -29,7 +29,14 @@ func_use() {
 }
 
 func_list() {
-    :
+    USE_CONF=$(cat $CMD_ROOT/version)
+    for item in `ls -1 $CMD_ROOT/configs | sed -e 's/\.cnf$//'`; do
+        if [ "$item" = "$USE_CONF" ]; then
+            echo "* $item (set by $CMD_ROOT/config/$item.cnf)"
+        else
+            echo "  $item"
+        fi
+    done
 }
 
 func_manuel() {
@@ -53,7 +60,7 @@ if [ $# -ne 0 ]; then
         echo $HOME
         ;;
     "list")
-        echo "list"
+        func_list
         ;;
     *)
         echo "No such command '${1}'"

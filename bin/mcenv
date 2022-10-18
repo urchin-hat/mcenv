@@ -11,13 +11,22 @@ CMD_ROOT=$(dirname $(dirname $(readlink -f $CMD_DIR/mcenv)))
 
 # @func
 # -------------------------
-
-func_init () {
-    [ ! -e $CMD_ROOT/version ] && touch $CMD_ROOT/version
-}
-
 func_add() {
-    :
+    [ ! -e $1 ] && echo "No file for the specified argument... ($1)" && exit 1
+    case "$1" in
+        *\.cnf)
+            if [ -e $CMD_ROOT/configs/$1 ]; then 
+                echo "A file with the same name already exists in the folder... ($CMD_ROOT/configs/)" 
+                echo "hint: Execute the delete command first."
+                exit 2
+            fi
+            cp $1 $CMD_ROOT/configs/$1
+            ;;
+        *)
+         echo "The extensions do not match. (*.cnf)"
+         exit 3
+         ;;
+       esac
 }
 
 func_link() {
@@ -45,13 +54,13 @@ func_manuel() {
 
 # @main
 # -------------------------
-func_init
+[ ! -e $CMD_ROOT/version ] && touch $CMD_ROOT/version
 
 if [ $# -ne 0 ]; then
     declare op=$1
     case "$op" in
     "add")
-        echo "add"
+        func_add $2
         ;;
     "link")
         echo "link"

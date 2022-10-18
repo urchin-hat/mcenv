@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# set
+# ---------
+shopt -s nocasematch
+
+# main
+# ---------
+if [ $# -ne 0 ]; then
+    declare op=$1
+    case "$op" in
+    "add")
+        echo "add"
+        ;;
+    "link" | "-l")
+        echo "link"
+        ;;
+    "use")
+        echo $HOME
+        ;;
+    *)
+        echo "No such command '${1}'"
+        cat ./manuel/usage.txt
+        exit 1
+        ;;
+    esac
+else
+    cat ./manuel/usage.txt
+fi
+
+exit 0

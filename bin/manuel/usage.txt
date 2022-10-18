@@ -1,0 +1,8 @@
+mcenv 0.0.1
+Usage: mcenv <command> [<options>]
+
+Commands:
+   add         ADD MySQL conf hard copy(cp command)
+   link        ADD MySQL conf hard copy(ln command)
+   use         Switch a version to MySQL.conf
+   list        List all MySQL conf

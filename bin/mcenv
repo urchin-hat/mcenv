@@ -49,7 +49,13 @@ func_link() {
 }
 
 func_use() {
-    :
+    TARGET_CONF="$CMD_ROOT/configs/$1.cnf"
+    if [ ! -e $TARGET_CONF ]; then 
+        echo "The specified conf does not exist... ($TARGET_CONF)"
+        exit 7
+    fi
+    ln -sf $CMD_ROOT/configs/$1.cnf $HOME/.my.cnf
+    echo $1 > $CMD_ROOT/version
 }
 
 func_list() {
@@ -81,7 +87,7 @@ if [ $# -ne 0 ]; then
         func_link $2
         ;;
     "use")
-        echo $HOME
+        func_use $2
         ;;
     "list")
         func_list

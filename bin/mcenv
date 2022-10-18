@@ -1,0 +1,151 @@
+#!/bin/bash
+
+# @set
+# -------------------------
+shopt -s nocasematch
+
+# @variable
+# -------------------------
+CMD_DIR=$(cd $(dirname $0); pwd)
+CMD_ROOT=$(dirname $(dirname $(readlink -f $CMD_DIR/mcenv)))
+
+# @func
+# -------------------------
+func_add() {
+    [ ! -e $1 ] && echo "No file for the specified argument... ($1)" && exit 1
+    case "$1" in
+        *\.cnf)
+            if [ -e $CMD_ROOT/configs/$1 ]; then 
+                echo "A file with the same name already exists in the folder... ($CMD_ROOT/configs/)" 
+                echo "hint: Execute the delete command first."
+                exit 2
+            fi
+            cp $1 $CMD_ROOT/configs/$1
+            ;;
+        *)
+         echo "The extensions do not match. (*.cnf)"
+         exit 3
+         ;;
+       esac
+}
+
+func_link() {
+    [ ! -e $1 ] && echo "No file for the specified argument... ($1)" && exit 4
+    case "$1" in
+        *\.cnf)
+            if [ -e $CMD_ROOT/configs/$1 ]; then 
+                echo "A file with the same name already exists in the folder... ($CMD_ROOT/configs/)" 
+                echo "hint: Execute the delete command first."
+                exit 5
+            fi
+            FULL_PATH=$(readlink -f $1)
+            ln -sf $FULL_PATH $CMD_ROOT/configs/
+            ;;
+        *)
+         echo "The extensions do not match. (*.cnf)"
+         exit 6
+         ;;
+       esac
+}
+
+func_delete() {
+    TARGET_CONF=$CMD_ROOT/configs/$1.cnf
+    USE_CONF=$(cat $CMD_ROOT/version)
+
+    if [ ! -e $TARGET_CONF ]; then
+        echo "The specified file is not managed."
+        exit 7
+    fi
+    
+    if [ -L $TARGET_CONF ]; then
+        unlink $TARGET_CONF
+        if [ "$1" = "$USE_CONF" ]; then
+            : > $CMD_ROOT/version
+            unlink $HOME/.my.cnf
+        fi
+    else
+        rm -rf $TARGET_CONF
+        if [ "$1" = "$USE_CONF" ]; then
+            : > $CMD_ROOT/version
+            unlink $HOME/.my.cnf
+        fi
+    fi
+
+
+}
+
+func_use() {
+    TARGET_CONF="$CMD_ROOT/configs/$1.cnf"
+    if [ ! -e $TARGET_CONF ]; then 
+        echo "The specified conf does not exist... ($TARGET_CONF)"
+        exit 7
+    fi
+    ln -sf $CMD_ROOT/configs/$1.cnf $HOME/.my.cnf
+    echo $1 > $CMD_ROOT/version
+}
+
+func_view() {
+    if [ -z $1 ]; then
+        USE_CONF=$(cat $CMD_ROOT/version)
+        echo "The conf currently in use is $USE_CONF. View '$USE_CONF'."
+        echo "*****************************************************************"
+        SHOW_CONF=$CMD_ROOT/configs/$USE_CONF.cnf
+    else
+        SHOW_CONF=$CMD_ROOT/configs/$1.cnf
+        echo "View '${1}'."
+        echo "-----------------------------------------------------------------"
+    fi
+    cat $SHOW_CONF
+}
+
+func_list() {
+    USE_CONF=$(cat $CMD_ROOT/version)
+    for item in `ls -1 $CMD_ROOT/configs | sed -e 's/\.cnf$//'`; do
+        if [ "$item" = "$USE_CONF" ]; then
+            echo "* $item (set by $CMD_ROOT/configs/$item.cnf)"
+        else
+            echo "  $item"
+        fi
+    done
+}
+
+func_manuel() {
+    cat $CMD_ROOT/bin/manuel/usage.txt
+}
+
+# @main
+# -------------------------
+[ ! -e $CMD_ROOT/version ] && touch $CMD_ROOT/version
+
+if [ $# -ne 0 ]; then
+    declare op=$1
+    case "$op" in
+    "add")
+        func_add $2
+        ;;
+    "link")
+        func_link $2
+        ;;
+    "use")
+        func_use $2
+        ;;
+    "delete")
+        func_delete $2
+        ;;        
+    "list")
+        func_list
+        ;;
+    "view")
+        func_view $2
+        ;;
+    *)
+        echo "No such command '${1}'"
+        func_manuel
+        exit 1
+        ;;
+    esac
+else
+    func_manuel
+fi
+
+exit 0

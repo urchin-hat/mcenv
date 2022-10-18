@@ -1,0 +1,12 @@
+mcenv 0.0.1
+Usage: mcenv <command> [<options>]
+Dsescription: env MySQL conf command
+
+Commands:
+   add         ADD MySQL conf hard copy(cp command)
+   link        ADD MySQL conf soft copy(ln command)
+   use         Switch a version to MySQL.conf
+   delete      Remove the MySQL conf from management.
+   list        List all MySQL conf
+   view        View my.conf file.
+   

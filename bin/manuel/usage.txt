@@ -7,3 +7,4 @@ Commands:
    link        ADD MySQL conf soft copy(ln command)
    use         Switch a version to MySQL.conf
    list        List all MySQL conf
+   

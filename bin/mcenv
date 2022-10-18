@@ -30,7 +30,22 @@ func_add() {
 }
 
 func_link() {
-    :
+    [ ! -e $1 ] && echo "No file for the specified argument... ($1)" && exit 4
+    case "$1" in
+        *\.cnf)
+            if [ -e $CMD_ROOT/configs/$1 ]; then 
+                echo "A file with the same name already exists in the folder... ($CMD_ROOT/configs/)" 
+                echo "hint: Execute the delete command first."
+                exit 5
+            fi
+            FULL_PATH=$(readlink -f $1)
+            ln -sf $FULL_PATH $CMD_ROOT/configs/
+            ;;
+        *)
+         echo "The extensions do not match. (*.cnf)"
+         exit 6
+         ;;
+       esac
 }
 
 func_use() {
@@ -63,7 +78,7 @@ if [ $# -ne 0 ]; then
         func_add $2
         ;;
     "link")
-        echo "link"
+        func_link $2
         ;;
     "use")
         echo $HOME

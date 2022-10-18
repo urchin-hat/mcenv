@@ -4,6 +4,6 @@ Dsescription: env MySQL conf command
 
 Commands:
    add         ADD MySQL conf hard copy(cp command)
-   link        ADD MySQL conf hard copy(ln command)
+   link        ADD MySQL conf soft copy(ln command)
    use         Switch a version to MySQL.conf
    list        List all MySQL conf

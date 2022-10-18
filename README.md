@@ -12,12 +12,12 @@ For example, the following use cases are envisioned
 # Getting started
 Manual git checkout
 
-Clone anyenv into ~/.mcenv.
+Clone mcenv into ~/.mcenv.
 ```
 $ git clone https://github.com/urchin-hat/mcenv.git ~/.mcenv
 ```
 
-Add ~/.mcenv/bin to your $PATH for access to the anyenv command-line utility.
+Add ~/.mcenv/bin to your $PATH for access to the mcenv command-line utility.
 ```
 example
 $ ln -sf  ~/.mcenv/bin/mcenv /usr/local/bin

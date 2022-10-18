@@ -15,12 +15,13 @@ func_add() {
     [ ! -e $1 ] && echo "No file for the specified argument... ($1)" && exit 1
     case "$1" in
         *\.cnf)
-            if [ -e $CMD_ROOT/configs/$1 ]; then 
+            TARGET_CONF="$CMD_ROOT/configs/$1.cnf"
+            if [ -e $TARGET_CONF ]; then 
                 echo "A file with the same name already exists in the folder... ($CMD_ROOT/configs/)" 
                 echo "hint: Execute the delete command first."
                 exit 2
             fi
-            cp $1 $CMD_ROOT/configs/$1
+            cp $1 $TARGET_CONF
             ;;
         *)
          echo "The extensions do not match. (*.cnf)"
@@ -33,7 +34,8 @@ func_link() {
     [ ! -e $1 ] && echo "No file for the specified argument... ($1)" && exit 4
     case "$1" in
         *\.cnf)
-            if [ -e $CMD_ROOT/configs/$1 ]; then 
+            TARGET_CONF="$CMD_ROOT/configs/$1.cnf"
+            if [ -e $TARGET_CONF ]; then 
                 echo "A file with the same name already exists in the folder... ($CMD_ROOT/configs/)" 
                 echo "hint: Execute the delete command first."
                 exit 5
@@ -70,8 +72,6 @@ func_delete() {
             unlink $HOME/.my.cnf
         fi
     fi
-
-
 }
 
 func_use() {
@@ -124,7 +124,7 @@ if [ $# -ne 0 ]; then
     *)
         echo "No such command '${1}'"
         func_manuel
-        exit 1
+        exit 8
         ;;
     esac
 else

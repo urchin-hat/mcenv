@@ -84,6 +84,20 @@ func_use() {
     echo $1 > $CMD_ROOT/version
 }
 
+func_view() {
+    if [ -z $1 ]; then
+        USE_CONF=$(cat $CMD_ROOT/version)
+        echo "The conf currently in use is $USE_CONF. View '$USE_CONF'."
+        echo "*****************************************************************"
+        SHOW_CONF=$CMD_ROOT/configs/$USE_CONF.cnf
+    else
+        SHOW_CONF=$CMD_ROOT/configs/$1.cnf
+        echo "View '${1}'."
+        echo "-----------------------------------------------------------------"
+    fi
+    cat $SHOW_CONF
+}
+
 func_list() {
     USE_CONF=$(cat $CMD_ROOT/version)
     for item in `ls -1 $CMD_ROOT/configs | sed -e 's/\.cnf$//'`; do
@@ -120,6 +134,9 @@ if [ $# -ne 0 ]; then
         ;;        
     "list")
         func_list
+        ;;
+    "view")
+        func_view $2
         ;;
     *)
         echo "No such command '${1}'"

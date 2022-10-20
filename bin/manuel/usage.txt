@@ -8,4 +8,5 @@ Commands:
    use         Switch a version to MySQL.conf
    delete      Remove the MySQL conf from management.
    list        List all MySQL conf
+   view        View my.conf file.
    
